@@ -87,6 +87,7 @@ class HomeScreen extends StatelessWidget {
             tooltip: 'Information',
             onPressed: () {
               // Action for info button
+              _showPopupInfoForm(context);
               print('Info button pressed');
             },
           ),
@@ -95,6 +96,7 @@ class HomeScreen extends StatelessWidget {
             tooltip: 'Settings',
             onPressed: () {
               // Action for settings button
+              _showPopupSettingsForm(context);
               print('Settings button pressed');
             },
           ),
@@ -111,7 +113,7 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () { _showPopupForm(context); },
+        onPressed: () { _showPopupNewTaskForm(context); },
         tooltip: 'Add new task',
         child: const Icon(Icons.add),
       ),
@@ -119,7 +121,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  void _showPopupForm(BuildContext context) {
+  void _showPopupNewTaskForm(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -165,4 +167,42 @@ class HomeScreen extends StatelessWidget {
       },
     );
   }
+
+  void _showPopupSettingsForm(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Settings'),
+          content: ElevatedButton(
+            onPressed: () {
+              // Toggle the theme when the button is pressed
+              themeController.toggleTheme();
+            },
+            child: Obx(() => Text(
+                themeController.isDarkTheme.value ? 'Switch to Light Theme' : 'Switch to Dark Theme')),
+          ),
+        );
+      }
+    );
+  }
+
+  void _showPopupInfoForm(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Info'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text('Made by: xAlpharax')
+              ],
+            ),
+          )
+        );
+      }
+    );
+  }
+  
 }
