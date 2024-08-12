@@ -12,7 +12,7 @@ pubspec.lock
 doc/api/
 
 # dotenv environment variables file
-.env*
+# .env* # AS REQUESTED, THE DOTENV WILL BE AVAILABLE PUBLICALLY
 
 # Avoid committing generated Javascript files:
 *.dart.js
