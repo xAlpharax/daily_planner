@@ -12,6 +12,10 @@ material design: auth screen -> dashboard -> form for adding and editing entries
                                           -> settings (icon) screen with theme switch
 light / dark mode toggle with persistance storage -- DONE
 
+Firebase Project done and linked to the app -- DONE
+
+Basic UI functionality and structure -- DONE
+
 Using
 
 firebase_core

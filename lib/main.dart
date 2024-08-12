@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'firebase_options.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
+
+// Run Point
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,); // Initialize Firebase
+  await GetStorage.init(); // Initialize GetStorage
+  runApp(MyApp());
+}
 
 // Controller for managing the theme mode
 class ThemeController extends GetxController {
@@ -35,11 +46,6 @@ class ThemeController extends GetxController {
   }
 }
 
-void main() async {
-  await GetStorage.init();
-  runApp(MyApp());
-}
-
 class MyApp extends StatelessWidget {
 
   // Instantiate the ThemeController using Get.put to make it globally available
@@ -49,11 +55,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       return GetMaterialApp(
-        title: 'Flutter GetX Theme Demo',
+        title: 'Daily Planner',
         theme: ThemeData.light(), // Light theme
         darkTheme: ThemeData.dark(), // Dark theme
         themeMode: themeController.isDarkTheme.value ? ThemeMode.dark : ThemeMode.light, // ternary go brr
         home: HomeScreen(),
+        // home: Obx(() {
+        //   return authController.isLoggedIn.value ? HomeScreen() : LoginScreen();
+        // })
         debugShowCheckedModeBanner: false,
       );
     });
@@ -64,11 +73,32 @@ class HomeScreen extends StatelessWidget {
   // Access the ThemeController
   final ThemeController themeController = Get.find();
 
+  final TextEditingController taskNameController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Daily Planner'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            tooltip: 'Information',
+            onPressed: () {
+              // Action for info button
+              print('Info button pressed');
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
+            onPressed: () {
+              // Action for settings button
+              print('Settings button pressed');
+            },
+          ),
+        ],
       ),
       body: Center(
         child: ElevatedButton(
@@ -80,22 +110,59 @@ class HomeScreen extends StatelessWidget {
               themeController.isDarkTheme.value ? 'Switch to Light Theme' : 'Switch to Dark Theme')),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () { _showPopupForm(context); },
+        tooltip: 'Add new task',
+        child: const Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+
+  void _showPopupForm(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('New Task'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: taskNameController,
+                  decoration: const InputDecoration(labelText: 'Task Name'),
+                ),
+                TextField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(labelText: 'Description'),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Close the dialog
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Handle form submission here
+                print('Task Name: ${taskNameController.text}');
+                print('Description: ${descriptionController.text}');
+                // You can also close the dialog after submission
+                Navigator.of(context).pop();
+                taskNameController.clear();
+                descriptionController.clear();
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
-
-// this is cool
-
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: _incrementCounter,
-//         tooltip: 'Increment',
-//         child: const Icon(Icons.add),
-//       ), // This trailing comma makes auto-formatting nicer for build methods.
-
-// also cool
-
-//         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-//         useMaterial3: true,
-//       ),
-//       darkTheme: ThemeData.dark(useMaterial3: true),
-//       home: const MyHomePage(title: 'Daily Planner'),
