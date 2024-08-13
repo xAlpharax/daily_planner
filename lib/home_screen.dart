@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
@@ -8,14 +9,68 @@ import 'theme_controller.dart';
 import 'login_screen.dart';
 import 'database.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   // Access the ThemeController
   final ThemeController themeController = Get.find();
 
   final TextEditingController taskNameController = TextEditingController();
+
   final TextEditingController descriptionController = TextEditingController();
 
-  HomeScreen({super.key});
+  Stream?taskStream;
+
+  getOnTheLoad () async {
+    taskStream = await DatabaseService().getTask("Tasks");
+    setState(() {
+
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getOnTheLoad();
+    super.initState();
+  }
+
+  Widget getTasks () {
+    return StreamBuilder(
+      stream: taskStream,
+      builder: (context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          return Expanded(
+          child: ListView.builder(
+            itemCount: snapshot.data.docs.length,
+            itemBuilder: (context, index) {
+              DocumentSnapshot documentSnapshot = snapshot.data.docs[index];
+              // return CheckboxListTile(
+              //   title: Text(documentSnapshot['todo']),
+              //   value: suggest,
+              //   onChanged: (newValue) {
+              //     setState(() {
+              //       suggest = newValue!;
+              //     });
+              //   },
+              // );
+              return Scaffold(
+                body: Text(documentSnapshot['todo']),
+              );
+            },
+          ),
+        );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,16 +105,14 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      // body: Center(
-      //   child: ElevatedButton(
-      //     onPressed: () {
-      //       // Toggle the theme when the button is pressed
-      //       themeController.toggleTheme();
-      //     },
-      //     child: Obx(() => Text(
-      //         themeController.isDarkTheme.value ? 'Switch to Light Theme' : 'Switch to Dark Theme')),
-      //   ),
+      // body: Column(
+      //   children: [
+      //     getTasks(),
+      //   ]
       // ),
+      body: Center(
+        child: getTasks()
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () { _showPopupNewTaskForm(context); },
         tooltip: 'Add new task',
@@ -130,7 +183,6 @@ class HomeScreen extends StatelessWidget {
                   DatabaseService().addTask(userTodo, id);
                   // WHAT THIS DID IS CHANGE THE SAME STRING EACH TIME
                   // WHY? because we haven t managed it yet
-
                   Navigator.of(context).pop();
                   taskNameController.clear();
                   descriptionController.clear();
@@ -184,5 +236,4 @@ class HomeScreen extends StatelessWidget {
         }
     );
   }
-
 }
