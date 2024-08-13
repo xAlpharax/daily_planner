@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+
+import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
+
 import 'package:get/get.dart';
 
 import 'theme_controller.dart';
+import 'login_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   // Access the ThemeController
@@ -18,6 +22,13 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Daily Planner'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Get.offAll(() => const LoginScreen());
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.info_outline),
             tooltip: 'Information',
@@ -124,16 +135,19 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _showPopupInfoForm(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const AlertDialog(
-              title: Text('Info'),
+          return AlertDialog(
+              title: const Text('Info'),
               content: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Text('Made by: xAlpharax'),
-                    // Text('d') // will add a Signed in as: $email that is signed in as.
+                    const Text('App made by: xAlpharax'),
+                    const Text('You are logged in as:'),
+                    Text("${user?.email}")
                   ],
                 ),
               )
