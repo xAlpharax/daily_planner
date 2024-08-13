@@ -8,6 +8,8 @@ https://stackoverflow.com/questions/54483617/flutter-daemon-terminated-when-i-tr
 
 Flutter To-Do list app with firebase and sqlite backend yadayada.
 
+android and web because firebase doesn t support linux -_- and only beta supports windows and mac.
+
 material design: auth screen -> dashboard -> form for adding and editing entries
                                           -> settings (icon) screen with theme switch
 light / dark mode toggle with persistance storage -- DONE
