@@ -87,7 +87,7 @@ class HomeScreen extends StatelessWidget {
                     decoration: const InputDecoration(labelText: 'Task Name'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Task Name should not be empty';
+                        return 'Field should not be empty';
                       }
                       return null;
                     },
