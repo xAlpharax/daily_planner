@@ -30,10 +30,11 @@ IT HAPPENED AGAIN!!!!!
 
 TODO done:
 make title (and later other things:  data scadentă nu poate fi în trecut) obligatory to input / not leave empty -- DONE
-
+Sent form data to cloud firestore -- DONE
 
 
 TODO not done:
+READ from firestore
 add / edit tasks from the form info into the homescreen/dashboard
 
 sync them with firebase firestore when online

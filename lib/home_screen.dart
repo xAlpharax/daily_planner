@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import 'theme_controller.dart';
 import 'login_screen.dart';
+import 'database.dart';
 
 class HomeScreen extends StatelessWidget {
   // Access the ThemeController
@@ -69,7 +70,10 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _showPopupNewTaskForm(BuildContext context) {
+
     final formKey = GlobalKey<FormState>();
+
+    final user = FirebaseAuth.instance.currentUser;
 
     showDialog(
       context: context,
@@ -115,6 +119,18 @@ class HomeScreen extends StatelessWidget {
                   // print('Task Name: ${taskNameController.text}');
                   // print('Description: ${descriptionController.text}');
                   // You can also close the dialog after submission
+
+                  // HANDLING FORM SUBMIT:
+                  String id = "${user?.uid}";
+                  Map<String, dynamic> userTodo = {
+                    "todo": taskNameController.text,
+                    "Id": id,
+                  };
+
+                  DatabaseService().addTask(userTodo, id);
+                  // WHAT THIS DID IS CHANGE THE SAME STRING EACH TIME
+                  // WHY? because we haven t managed it yet
+
                   Navigator.of(context).pop();
                   taskNameController.clear();
                   descriptionController.clear();
