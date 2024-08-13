@@ -69,24 +69,35 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _showPopupNewTaskForm(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('New Task'),
           content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: taskNameController,
-                  decoration: const InputDecoration(labelText: 'Task Name'),
-                ),
-                TextField(
-                  controller: descriptionController,
-                  decoration: const InputDecoration(labelText: 'Description'),
-                ),
-              ],
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: taskNameController,
+                    decoration: const InputDecoration(labelText: 'Task Name'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Task Name should not be empty';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: descriptionController,
+                    decoration: const InputDecoration(labelText: 'Description'),
+                  ),
+                ],
+              ),
             ),
           ),
           actions: [
@@ -99,13 +110,15 @@ class HomeScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                // Handle form submission here
-                // print('Task Name: ${taskNameController.text}');
-                // print('Description: ${descriptionController.text}');
-                // You can also close the dialog after submission
-                Navigator.of(context).pop();
-                taskNameController.clear();
-                descriptionController.clear();
+                if (formKey.currentState!.validate()) {
+                  // Handle form submission here
+                  // print('Task Name: ${taskNameController.text}');
+                  // print('Description: ${descriptionController.text}');
+                  // You can also close the dialog after submission
+                  Navigator.of(context).pop();
+                  taskNameController.clear();
+                  descriptionController.clear();
+                }
               },
               child: const Text('Submit'),
             ),
