@@ -59,25 +59,4 @@ change done color for dark theme as it s not ok -- DONE
 
 Folosește o bază de date SQL sau NOSQL externa la care sa te autentifici securizat. Înscrie datele în dotenv, pe care să îl INCLUZI in repository -- DONE
 
-Using
-# As per pubspec.yaml
-
-# state manager
-get: ^4.6.6
-get_storage: ^2.1.1
-
-# handle asking for permissions
-permission_handler: ^11.3.1
-
-# localization
-intl: ^0.19.0
-
-# firebase tooling
-firebase_core: ^3.3.0
-firebase_auth: ^5.1.4
-firebase_ui_auth: ^1.15.0
-cloud_firestore: ^5.2.1
-firebase_messaging: ^15.0.4
-
-# pretty app icon on all platforms
-flutter_launcher_icons: ^0.13.1
+TODO not done:
