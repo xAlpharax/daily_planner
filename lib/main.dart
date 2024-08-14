@@ -9,6 +9,8 @@ import 'firebase_options.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
 
+import 'package:intl/date_symbol_data_local.dart';
+
 import 'theme_controller.dart';
 import 'login_screen.dart';
 import 'home_screen.dart';
@@ -25,6 +27,8 @@ void main() async {
     // ... other providers like google, github, etc
   ]);
   await GetStorage.init(); // Initialize GetStorage
+  await initializeDateFormatting('fr_FR', null); // Initialize Locale
+  // (this is needed because default makes US dates for my machines, you may not need it and so you can remove this line and al 'fr_FR' from the code)
   runApp(MyApp());
 }
 

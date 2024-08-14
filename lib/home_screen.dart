@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: Text(dueDate == null ? 'No Due Date Chosen' : 'Due Date: ${DateFormat.yMd().format(dueDate!)}'),
+                          child: Text(dueDate == null ? 'No Due Date Chosen' : 'Due Date: ${DateFormat.yMd('fr_FR').format(dueDate!)}'),
                         ),
                         TextButton(
                           child: Text('Select Date'),
@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
-                      'Created At: ${DateFormat.yMd().add_jm().format(createdAt!)}',
+                      'Created At: ${DateFormat.yMd('fr_FR').add_jm().format(createdAt!)}',
                       style: const TextStyle(fontStyle: FontStyle.italic),
                     ),
                   ),
@@ -281,7 +281,7 @@ int _getPriorityValue(String priority) {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(documentSnapshot['description']),
-                        Text('Due Date: ${DateFormat.yMd().format(dueDate)}'),
+                        Text('Due Date: ${DateFormat.yMd('fr_FR').format(dueDate)}'),
                       ],
                     ),
                     onTap: () => _addOrEditTask(documentSnapshot),
