@@ -1,5 +1,5 @@
 name: daily_planner
-description: "A new Flutter project."
+description: "A Flutter ToDo Portfolio App"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -55,10 +55,6 @@ dependencies:
   # optional
 #  firebase_storage: ^12.1.3
 #  firebase_database: ^11.0.4
-
-#  material_color_utilities: ^0.11.1
-#  string_scanner: ^1.2.0
-#  test_api: ^0.7.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

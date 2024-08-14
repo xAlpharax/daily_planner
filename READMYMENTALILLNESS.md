@@ -1,0 +1,83 @@
+# daily_planner
+
+FINALLLY
+
+fuck god damn
+
+https://stackoverflow.com/questions/54483617/flutter-daemon-terminated-when-i-try-to-launch-my-app fuck me
+
+anyways:
+
+Flutter To-Do list app with firebase and sqlite backend yadayada.
+
+i ll do android and web because firebase doesn t support linux -_- and only beta supports windows and mac.
+
+STRUCTURE:
+material design: auth screen -> dashboard -> form for adding and editing entries
+                                          -> settings (icon) screen with theme switch
+
+light / dark mode toggle with persistance storage -- DONE
+
+Firebase Project done and linked to the app -- DONE
+
+FIREBASE AUTH WITH COOL UI, EMAIL/PASS with PASS RESET VIA MAIL LINKS -- DONE
+HELL YEAH -- also displaying the currently logged in user under info dialog -- DONE
+
+Good UI design and structure -- DONE
+
+https://stackoverflow.com/questions/54483617/flutter-daemon-terminated-when-i-try-to-launch-my-app fuck me
+IT HAPPENED AGAIN!!!!!
+
+TODO done:
+title description form and cool UI menus -- DONE
+make title obligatory to input / not leave empty -- DONE
+Send data to cloud firestore -- DONE
+READING AND SENDING DATA TO FIRESTORE -- DONE
+ask for notification permission -- DONE
+sending and receiving notifications with firebase cloud messaging -- DONE
+
+sync them with firebase firestore when online -- WHY IS THIS SO HARD TO PULL
+                                              -- DONE
+                                              -- HELL YEAH
+
+notifications are working -- DONE
+
+task list persists offline on the device and when internet is up again it sends the modifs to the db -- DONE
+
+add / edit tasks from the form info into the homescreen/dashboard -- DONE
+
+sarcinile ar trebui să fie afișate într-o listă, ordonată în funcție de prioritate (de exemplu, Urgent, Important, Normal) -- DONE
+
+input validation : data scadentă nu poate fi în trecut, titlu obligatoriu, prioritatea default e normala, descrierea e optionala, data de due default e data de azi -- DONE
+
+oferă utilizatorilor opțiunea de a marca sarcinile ca finalizate sau nefinalizate. -- DONE
+sarcinile finalizate ar trebui să fie evidențiate sau mutate într-o secțiune separată. -- DONE ambele sunt facute
+
+change date format acording to locale (to french dates :cool:) -- DONE
+
+change done color for dark theme as it s not ok -- DONE
+
+Folosește o bază de date SQL sau NOSQL externa la care sa te autentifici securizat. Înscrie datele în dotenv, pe care să îl INCLUZI in repository -- DONE
+
+Using
+# As per pubspec.yaml
+
+# state manager
+get: ^4.6.6
+get_storage: ^2.1.1
+
+# handle asking for permissions
+permission_handler: ^11.3.1
+
+# localization
+intl: ^0.19.0
+
+# firebase tooling
+firebase_core: ^3.3.0
+firebase_auth: ^5.1.4
+firebase_ui_auth: ^1.15.0
+cloud_firestore: ^5.2.1
+firebase_messaging: ^15.0.4
+
+# pretty app icon on all platforms
+flutter_launcher_icons: ^0.13.1

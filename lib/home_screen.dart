@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Text(dueDate == null ? 'No Due Date Chosen' : 'Due Date: ${DateFormat.yMd('fr_FR').format(dueDate!)}'),
                         ),
                         TextButton(
-                          child: Text('Select Date'),
+                          child: const Text('Select Date'),
                           onPressed: () async {
                             DateTime? pickedDate = await showDatePicker(
                               context: context,
@@ -241,13 +241,13 @@ int _getPriorityValue(String priority) {
             List<DocumentSnapshot> unfinishedTasks = [];
             List<DocumentSnapshot> finishedTasks = [];
 
-            streamSnapshot.data!.docs.forEach((task) {
+            for (var task in streamSnapshot.data!.docs) {
               if (task['is_done']) {
                 finishedTasks.add(task);
               } else {
                 unfinishedTasks.add(task);
               }
-            });
+            }
 
             unfinishedTasks.sort((a, b) {
               return _getPriorityValue(a['priority'])
@@ -264,6 +264,8 @@ int _getPriorityValue(String priority) {
               ...finishedTasks
             ];
 
+            Color? isDoneColor = themeController.isDarkTheme.value ? Colors.black26 : Colors.grey[300];
+
             return ListView.builder(
               itemCount: sortedTasks.length, // streamSnapshot.data!.docs.length,
               itemBuilder: (context, index) {
@@ -271,7 +273,7 @@ int _getPriorityValue(String priority) {
                 final dueDate = (documentSnapshot['due_date'] as Timestamp).toDate();
                 return Card(
                   margin: const EdgeInsets.all(10),
-                  color: documentSnapshot['is_done'] ? Colors.grey[300] : null,
+                  color: documentSnapshot['is_done'] ? isDoneColor : null,
                   child: ListTile(
                     title: Text(
                       documentSnapshot['name'],
@@ -286,22 +288,30 @@ int _getPriorityValue(String priority) {
                     ),
                     onTap: () => _addOrEditTask(documentSnapshot),
                     trailing: SizedBox(
-                      width: 110,
+                      width: 75, // PERFECT
                       child: Row(
                         children: [
-                          Checkbox(
-                            value: documentSnapshot['is_done'],
-                            onChanged: (_) => _toggleDoneStatus(documentSnapshot),
+                          Flexible(
+                            child: Checkbox(
+                              value: documentSnapshot['is_done'],
+                              onChanged: (_) => _toggleDoneStatus(documentSnapshot),
+                            ),
                           ),
-                          // IconButton( // You can add this back if requested, I find it cluttering the cards for no reason
-                          //   icon: const Icon(Icons.edit),
-                          //   tooltip: 'Edit',
-                          //   onPressed: () => _addOrEditTask(documentSnapshot),
+
+                          // Flexible(
+                          //   child: IconButton( // You can add this back if requested, I find it cluttering the cards for no reason
+                          //     icon: const Icon(Icons.edit),
+                          //     tooltip: 'Edit',
+                          //     onPressed: () => _addOrEditTask(documentSnapshot),
+                          //   ),
                           // ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            tooltip: 'Delete',
-                            onPressed: () => _deleteTask(documentSnapshot.id),
+
+                          Flexible(
+                            child: IconButton(
+                              icon: const Icon(Icons.delete),
+                              tooltip: 'Delete',
+                              onPressed: () => _deleteTask(documentSnapshot.id),
+                            ),
                           ),
                         ],
                       ),
