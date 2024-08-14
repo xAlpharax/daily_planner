@@ -58,7 +58,7 @@ class AuthenticationWrapper extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     // print('Logged in as: ${user?.email}'); // AYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
     if (user != null) {
-      return HomeScreen();
+      return const HomeScreen();
     } else {
       return const LoginScreen();
     }

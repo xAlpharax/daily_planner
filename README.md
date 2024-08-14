@@ -31,13 +31,14 @@ IT HAPPENED AGAIN!!!!!
 TODO done:
 make title (and later other things:  data scadentă nu poate fi în trecut) obligatory to input / not leave empty -- DONE
 Sent form data to cloud firestore -- DONE
+ask for notification permission -- DONE
 
 
 TODO not done:
 READ from firestore
 add / edit tasks from the form info into the homescreen/dashboard
 
-sync them with firebase firestore when online
+sync them with firebase firestore when online -- WHY IS THIS SO HARD TO PULL
 persist the tasks offline with get ???
 
 doable si must:
@@ -54,9 +55,6 @@ not so doable inca
 #### 5. Persistența Datelor:
 +- Folosește o bază de date SQL sau NOSQL externa la care sa te autentifici securizat. Înscrie datele în dotenv, pe care să îl INCLUZI in repository
 +- Asigură sincronizarea automată a datelor locale cu Firebase Firestore atunci când utilizatorul este conectat la internet.
-
-#### 6. Notificări Push:
-+- Implementarea notificărilor push pentru a reaminti utilizatorilor de sarcinile scadente în curând. Poți folosi Firebase Cloud Messaging (FCM) pentru acest lucru.
 
 Using
 (insert final lib list when done)

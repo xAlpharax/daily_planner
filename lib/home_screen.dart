@@ -1,9 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:get/get.dart';
+
+import 'package:permission_handler/permission_handler.dart';
 
 import 'theme_controller.dart';
 import 'login_screen.dart';
@@ -35,10 +38,44 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    getOnTheLoad();
     super.initState();
+    requestNotificationPermission();
+    // getOnTheLoad();
   }
+
+  void requestNotificationPermission() async {
+
+    if (await Permission.notification.status.isGranted) {
+      print('Notification permission has been already granted.');
+      // Notifications can be sent
+
+      // Let s get the token for a mock notification:
+      final fcmToken = await FirebaseMessaging.instance.getToken(); // THIS REFRESHES FOR EACH APP INSTALLATION
+      print("$fcmToken");
+
+    }
+    else {
+      PermissionStatus status = await Permission.notification.request();
+      // After requesting, you ll need to have it run in the background manually
+      // Never mind, it doesn't need anything manual, it s just my notification preferences
+      // So it should be alright just saying yes to notifications and it should all work fine
+
+      if (status.isGranted) {
+        print('Notification permission granted.');
+        // Notifications can now be sent
+
+        // Let s get the token for a mock notification:
+        final fcmToken = await FirebaseMessaging.instance.getToken(); // THIS REFRESHES FOR EACH APP INSTALLATION
+        print("$fcmToken");
+
+      } else if (status.isDenied) {
+        print('Notification permission denied. No token for you.');
+        // Optionally open app settings
+        // openAppSettings();
+      }
+    }
+
+}
 
   Widget getTasks () {
     return StreamBuilder(

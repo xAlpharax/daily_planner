@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
     return SignInScreen(
       actions: [
         AuthStateChangeAction<SignedIn>((context, state) {
-          Get.offAll(() => HomeScreen());
+          Get.offAll(() => const HomeScreen());
 
           // can easily implement email verifying
           // if (!state.user!.isEmailVerified) {
