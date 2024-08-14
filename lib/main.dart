@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 
 import 'package:get_storage/get_storage.dart';
@@ -16,9 +17,12 @@ import 'home_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,); // Initialize Firebase
+  FirebaseFirestore.instance.settings = const Settings( // Initialize Cloud Firestore
+    persistenceEnabled: true,
+  );
   FirebaseUIAuth.configureProviders([
     EmailAuthProvider(),
-    // ... other providers
+    // ... other providers like google, github, etc
   ]);
   await GetStorage.init(); // Initialize GetStorage
   runApp(MyApp());
@@ -40,9 +44,6 @@ class MyApp extends StatelessWidget {
         darkTheme: ThemeData.dark(), // Dark theme
         themeMode: themeController.isDarkTheme.value ? ThemeMode.dark : ThemeMode.light, // ternary go brr
         home: const AuthenticationWrapper(), // HomeScreen(),
-        // home: Obx(() {
-        //   return authController.isLoggedIn.value ? HomeScreen() : LoginScreen();
-        // })
         debugShowCheckedModeBanner: false,
       );
     });

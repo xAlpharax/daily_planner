@@ -29,32 +29,32 @@ https://stackoverflow.com/questions/54483617/flutter-daemon-terminated-when-i-tr
 IT HAPPENED AGAIN!!!!!
 
 TODO done:
-make title (and later other things:  data scadentă nu poate fi în trecut) obligatory to input / not leave empty -- DONE
-Sent form data to cloud firestore -- DONE
+title description form and cool UI menus -- DONE
+make title obligatory to input / not leave empty -- DONE
+Send data to cloud firestore -- DONE
+READING AND SENDING DATA TO FIRESTORE -- DONE
 ask for notification permission -- DONE
-
-
-TODO not done:
-READ from firestore
-add / edit tasks from the form info into the homescreen/dashboard
+sending and receiving notifications with firebase cloud messaging -- DONE
 
 sync them with firebase firestore when online -- WHY IS THIS SO HARD TO PULL
-persist the tasks offline with get ???
+                                              -- DONE
+                                              -- HELL YEAH
 
-doable si must:
+task list persists offline on the device and when internet is up again it sends the modifs to the db -- DONE
 
-+- Sarcinile ar trebui să fie afișate într-o listă, ordonată în funcție de prioritate (de exemplu, Urgent, Important, Normal).
-+- Fiecare sarcină trebuie să aibă următoarele atribute: titlu, descriere, prioritate, data scadentă, stare (completată/necompletată).
+add / edit tasks from the form info into the homescreen/dashboard -- DONE
 
-#### 4. Marcare Sarcini ca Finalizate:
-+- Oferă utilizatorilor opțiunea de a marca sarcinile ca finalizate sau nefinalizate.
-+- Sarcinile finalizate ar trebui să fie evidențiate sau mutate într-o secțiune separată.
+sarcinile ar trebui să fie afișate într-o listă, ordonată în funcție de prioritate (de exemplu, Urgent, Important, Normal) -- DONE
 
-not so doable inca
+input validation : data scadentă nu poate fi în trecut, titlu obligatoriu, prioritatea default e normala, descrierea e optionala, data de due default e data de azi -- DONE
+
+oferă utilizatorilor opțiunea de a marca sarcinile ca finalizate sau nefinalizate. -- DONE
+sarcinile finalizate ar trebui să fie evidențiate sau mutate într-o secțiune separată. -- DONE ambele sunt facute
+
+TODO not done:
 
 #### 5. Persistența Datelor:
 +- Folosește o bază de date SQL sau NOSQL externa la care sa te autentifici securizat. Înscrie datele în dotenv, pe care să îl INCLUZI in repository
-+- Asigură sincronizarea automată a datelor locale cu Firebase Firestore atunci când utilizatorul este conectat la internet.
 
 Using
-(insert final lib list when done)
+(insert final lib list from pubspec.yaml when done)
