@@ -13,11 +13,15 @@ This app's features:
 - Cool UI and UX (imo)
 - Light / Dark mode with state management
 
+- Dotenv and every key or stuff shown is deliberate for the project and was required.
+
 ## Installation Instructions
 
 Go to the [Releases](https://github.com/xAlpharax/daily_planner/releases) page of the project and download the `.apk`, then install it. (I'm sorry but for the other platforms supported you will have to compile it yourself)
 
 ## Demo
+
+https://github.com/user-attachments/assets/8c49eba9-3db8-4758-a8d2-312f689b21ba
 
 ## Compiling Instructions
 
