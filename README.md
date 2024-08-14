@@ -12,8 +12,7 @@ This app's features:
 - FOSS, it is Free and and Open Source Software with an * asterisk because of Firebase use
 - Cool UI and UX (imo)
 - Light / Dark mode with state management
-
-- Dotenv and every key or stuff shown is deliberate for the project and was required.
+- (!) Dotenv and every key or stuff shown is deliberate for the project and was required.
 
 ## Installation Instructions
 
@@ -32,7 +31,7 @@ https://github.com/user-attachments/assets/8c49eba9-3db8-4758-a8d2-312f689b21ba
 5. ???
 6. Profit.
 
-More simply:
+More simply put:
 
 ```bash
 # make sure flutter is installed and you can use it in cli like:
@@ -76,6 +75,8 @@ firebase_messaging: ^15.0.4
 # pretty app icon on all platforms
 flutter_launcher_icons: ^0.13.1
 ```
+
+## Graph detailing the arhitecture
 
 ## Flutter Installation Versions Info
 
