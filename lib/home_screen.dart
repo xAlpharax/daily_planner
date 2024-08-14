@@ -30,8 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void _addOrEditTask([DocumentSnapshot? documentSnapshot]) {
     final TextEditingController taskNameController = TextEditingController();
     final TextEditingController taskDescriptionController = TextEditingController();
-    DateTime? dueDate;
-    String? priority;
+    DateTime? dueDate = DateTime.now(); // Set default due date to right now
+    String? priority = 'Normal'; // Set default priority of tasks to be Normal
 
     DateTime? createdAt;
 
@@ -45,22 +45,31 @@ class _HomeScreenState extends State<HomeScreen> {
       createdAt = DateTime.now();
     }
 
+    final formKey = GlobalKey<FormState>();
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text(documentSnapshot == null ? 'Add Task' : 'Edit Task'),
+              title: Text(documentSnapshot == null ? 'New Task' : 'Edit Task'),
               content: SingleChildScrollView(
+                key: formKey,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextField(
+                    TextFormField(
                       controller: taskNameController,
-                      decoration: const InputDecoration(labelText: 'Name'),
+                      decoration: const InputDecoration(labelText: 'Task Name'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Field should not be empty';
+                        }
+                        return null;
+                      },
                     ),
-                    TextField(
+                    TextFormField(
                       controller: taskDescriptionController,
                       decoration: const InputDecoration(labelText: 'Description'),
                     ),
@@ -90,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   DropdownButton<String>(
                     value: priority,
-                    hint: Text('Select Priority'),
+                    hint: const Text('Select Priority'),
                     items: ['Critical', 'Normal', 'Low'].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -108,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
                       'Created At: ${DateFormat.yMd().add_jm().format(createdAt!)}',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                      style: const TextStyle(fontStyle: FontStyle.italic),
                     ),
                   ),
             ],
@@ -118,39 +127,48 @@ class _HomeScreenState extends State<HomeScreen> {
             TextButton(
               child: const Text('Cancel'),
               onPressed: () {
+                // Close the dialog
                 Navigator.of(context).pop();
               },
             ),
-            TextButton(
+            ElevatedButton(
               child: Text(documentSnapshot == null ? 'Add' : 'Update'),
               onPressed: () async {
-                final String name = taskNameController.text;
-                final String description = taskDescriptionController.text;
+                if (true) {
+                  // Handle form submission here
+                  final String name = taskNameController.text;
+                  final String description = taskDescriptionController.text;
+                  print('Task Name: $name');
+                  print('Description: $description');
 
-                if (name.isNotEmpty && description.isNotEmpty && priority != null && dueDate != null) {
-                  if (documentSnapshot == null) {
-                    await _tasks.add({
-                      "name": name,
-                      "description": description,
-                      "created_at": Timestamp.fromDate(DateTime.now()),
-                      "due_date": Timestamp.fromDate(dueDate!),
-                      "priority": priority,
-                      "is_done": false
-                    });
-                  } else {
-                    await _tasks.doc(documentSnapshot.id).update({
-                      "name": name,
-                      "description": description,
-                      "created_at": Timestamp.fromDate(DateTime.now()), // Update the creation date
-                      "due_date": Timestamp.fromDate(dueDate!),
-                      "priority": priority,
-                    });
+                  if (name.isNotEmpty && description.isNotEmpty && priority != null && dueDate != null) {
+                    if (documentSnapshot == null) {
+                      await _tasks.add({
+                        "name": name,
+                        "description": description,
+                        "created_at": Timestamp.fromDate(DateTime.now()),
+                        "due_date": Timestamp.fromDate(dueDate!),
+                        "priority": priority,
+                        "is_done": false
+                      });
+                    } else {
+                      await _tasks.doc(documentSnapshot.id).update({
+                        "name": name,
+                        "description": description,
+                        "created_at": Timestamp.fromDate(DateTime.now()),
+                        // Update the creation date
+                        "due_date": Timestamp.fromDate(dueDate!),
+                        "priority": priority,
+                      });
+                    }
+                    Navigator.of(context).pop();
+                    taskNameController.clear();
+                    taskDescriptionController.clear();
                   }
-                  Navigator.of(context).pop();
                 }
-              },
+                },
             ),
-          ],
+        ],
         );
       },
     );
@@ -185,7 +203,35 @@ int _getPriorityValue(String priority) {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Todo List'),
+        title: const Text('Daily Planner'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Log Out',
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Get.offAll(() => const LoginScreen());
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            tooltip: 'Information',
+            onPressed: () {
+              // Action for info button
+              _showPopupInfoForm(context);
+              // print('Info button pressed');
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
+            onPressed: () {
+              // Action for settings button
+              _showPopupSettingsForm(context);
+              // print('Settings button pressed');
+            },
+          ),
+        ],
       ),
       body: StreamBuilder(
         stream: _tasks.orderBy('priority').orderBy('created_at', descending: true).snapshots(),
@@ -240,19 +286,21 @@ int _getPriorityValue(String priority) {
                     ),
                     onTap: () => _addOrEditTask(documentSnapshot),
                     trailing: SizedBox(
-                      width: 150,
+                      width: 110,
                       child: Row(
                         children: [
                           Checkbox(
                             value: documentSnapshot['is_done'],
                             onChanged: (_) => _toggleDoneStatus(documentSnapshot),
                           ),
+                          // IconButton( // You can add this back if requested, I find it cluttering the cards for no reason
+                          //   icon: const Icon(Icons.edit),
+                          //   tooltip: 'Edit',
+                          //   onPressed: () => _addOrEditTask(documentSnapshot),
+                          // ),
                           IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () => _addOrEditTask(documentSnapshot),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.delete),
+                            icon: const Icon(Icons.delete),
+                            tooltip: 'Delete',
                             onPressed: () => _deleteTask(documentSnapshot.id),
                           ),
                         ],
@@ -270,8 +318,10 @@ int _getPriorityValue(String priority) {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _addOrEditTask(),
-        child: Icon(Icons.add),
+        tooltip: 'Add New Task',
+        child: const Icon(Icons.add),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -314,169 +364,45 @@ int _getPriorityValue(String priority) {
     }
   }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Daily Planner'),
-//         actions: [
-//           IconButton(
-//             icon: const Icon(Icons.logout),
-//             onPressed: () async {
-//               await FirebaseAuth.instance.signOut();
-//               Get.offAll(() => const LoginScreen());
-//             },
-//           ),
-//           IconButton(
-//             icon: const Icon(Icons.info_outline),
-//             tooltip: 'Information',
-//             onPressed: () {
-//               // Action for info button
-//               _showPopupInfoForm(context);
-//               // print('Info button pressed');
-//             },
-//           ),
-//           IconButton(
-//             icon: const Icon(Icons.settings),
-//             tooltip: 'Settings',
-//             onPressed: () {
-//               // Action for settings button
-//               _showPopupSettingsForm(context);
-//               // print('Settings button pressed');
-//             },
-//           ),
-//         ],
-//       ),
-//       // body: Column(
-//       //   children: [
-//       //     getTasks(),
-//       //   ]
-//       // ),
-//       body: Center(
-//         child: getTasks()
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: () { _showPopupNewTaskForm(context); },
-//         tooltip: 'Add new task',
-//         child: const Icon(Icons.add),
-//       ),
-//       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-//     );
-//   }
-//
-//   void _showPopupNewTaskForm(BuildContext context) {
-//
-//     final formKey = GlobalKey<FormState>();
-//
-//     final user = FirebaseAuth.instance.currentUser;
-//
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           title: const Text('New Task'),
-//           content: SingleChildScrollView(
-//             child: Form(
-//               key: formKey,
-//               child: Column(
-//                 mainAxisSize: MainAxisSize.min,
-//                 children: [
-//                   TextFormField(
-//                     controller: taskNameController,
-//                     decoration: const InputDecoration(labelText: 'Task Name'),
-//                     validator: (value) {
-//                       if (value == null || value.isEmpty) {
-//                         return 'Field should not be empty';
-//                       }
-//                       return null;
-//                     },
-//                   ),
-//                   TextFormField(
-//                     controller: descriptionController,
-//                     decoration: const InputDecoration(labelText: 'Description'),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//           actions: [
-//             TextButton(
-//               onPressed: () {
-//                 // Close the dialog
-//                 Navigator.of(context).pop();
-//               },
-//               child: const Text('Cancel'),
-//             ),
-//             ElevatedButton(
-//               onPressed: () {
-//                 if (formKey.currentState!.validate()) {
-//                   // Handle form submission here
-//                   // print('Task Name: ${taskNameController.text}');
-//                   // print('Description: ${descriptionController.text}');
-//                   // You can also close the dialog after submission
-//
-//                   // HANDLING FORM SUBMIT:
-//                   String id = "${user?.uid}";
-//                   Map<String, dynamic> userTodo = {
-//                     "todo": taskNameController.text,
-//                     "Id": id,
-//                   };
-//
-//                   DatabaseService().addTask(userTodo, id);
-//                   // WHAT THIS DID IS CHANGE THE SAME STRING EACH TIME
-//                   // WHY? because we haven t managed it yet
-//                   Navigator.of(context).pop();
-//                   taskNameController.clear();
-//                   descriptionController.clear();
-//                 }
-//               },
-//               child: const Text('Submit'),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-//
-//   void _showPopupSettingsForm(BuildContext context) {
-//     showDialog(
-//         context: context,
-//         builder: (BuildContext context) {
-//           return AlertDialog(
-//             title: const Text('Settings'),
-//             content: ElevatedButton(
-//               onPressed: () {
-//                 // Toggle the theme when the button is pressed
-//                 themeController.toggleTheme();
-//               },
-//               child: Obx(() => Text(
-//                   themeController.isDarkTheme.value ? 'Switch to Light Theme' : 'Switch to Dark Theme')),
-//             ),
-//           );
-//         }
-//     );
-//   }
-//
-//   void _showPopupInfoForm(BuildContext context) {
-//     final user = FirebaseAuth.instance.currentUser;
-//
-//     showDialog(
-//         context: context,
-//         builder: (BuildContext context) {
-//           return AlertDialog(
-//               title: const Text('Info'),
-//               content: SingleChildScrollView(
-//                 child: Column(
-//                   children: [
-//                     const Text('App made by: xAlpharax'),
-//                     const Text('You are logged in as:'),
-//                     Text("${user?.email}")
-//                   ],
-//                 ),
-//               )
-//           );
-//         }
-//     );
-//   }
+  void _showPopupSettingsForm(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Settings'),
+            content: ElevatedButton(
+              onPressed: () {
+                // Toggle the theme when the button is pressed
+                themeController.toggleTheme();
+              },
+              child: Obx(() => Text(
+                  themeController.isDarkTheme.value ? 'Switch to Light Theme' : 'Switch to Dark Theme')),
+            ),
+          );
+        }
+    );
+  }
+
+  void _showPopupInfoForm(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: const Text('Info'),
+              content: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const Text('App made by: xAlpharax'),
+                    const Text('You are logged in as:'),
+                    Text("${user?.email}")
+                  ],
+                ),
+              )
+          );
+        }
+    );
+  }
 
 }

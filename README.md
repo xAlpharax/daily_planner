@@ -51,6 +51,10 @@ input validation : data scadentă nu poate fi în trecut, titlu obligatoriu, pri
 oferă utilizatorilor opțiunea de a marca sarcinile ca finalizate sau nefinalizate. -- DONE
 sarcinile finalizate ar trebui să fie evidențiate sau mutate într-o secțiune separată. -- DONE ambele sunt facute
 
+pretty much all done, i have to:
+change done color for dark theme as it s not ok
+change date format acording to locale, probably a android manifest change
+
 TODO not done:
 
 #### 5. Persistența Datelor:
