@@ -55,125 +55,124 @@ class _HomeScreenState extends State<HomeScreen> {
             return AlertDialog(
               title: Text(documentSnapshot == null ? 'New Task' : 'Edit Task'),
               content: SingleChildScrollView(
-                key: formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      controller: taskNameController,
-                      decoration: const InputDecoration(labelText: 'Task Name'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Field should not be empty';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: taskDescriptionController,
-                      decoration: const InputDecoration(labelText: 'Description'),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(dueDate == null ? 'No Due Date Chosen' : 'Due Date: ${DateFormat.yMd('fr_FR').format(dueDate!)}'),
-                        ),
-                        TextButton(
-                          child: const Text('Select Date'),
-                          onPressed: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: dueDate ?? DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(2101),
-                            );
-                            if (pickedDate != null) {
-                              setState(() {
-                                dueDate = pickedDate;
-                              });
-                            }
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        controller: taskNameController,
+                        decoration: const InputDecoration(labelText: 'Task Name'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Field should not be empty';
                           }
-                      )
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        controller: taskDescriptionController,
+                        decoration: const InputDecoration(labelText: 'Description'),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(dueDate == null ? 'No Due Date Chosen' : 'Due Date: ${DateFormat.yMd('fr_FR').format(dueDate!)}'),
+                          ),
+                          TextButton(
+                            child: const Text('Select Date'),
+                            onPressed: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: dueDate ?? DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2101),
+                              );
+                              if (pickedDate != null) {
+                                setState(() {
+                                  dueDate = pickedDate;
+                                });
+                              }
+                            }
+                        )
+                      ],
+                    ),
+                    DropdownButtonFormField<String>(
+                      value: priority,
+                      hint: const Text('Select Priority'),
+                      items: ['Critical', 'Normal', 'Low'].map((String value) {
+                        return DropdownMenuItem<String>(value: value, child: Text(value));
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          priority = value;
+                        });
+                      },
+                      validator: (value) => value == null ? 'Please select a priority' : null,
+                    ),
+                    if (documentSnapshot != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Text(
+                          'Created At: ${DateFormat.yMd('fr_FR').add_jm().format(createdAt!)}',
+                          style: const TextStyle(fontStyle: FontStyle.italic),
+                        ),
+                      ),
                     ],
                   ),
-                  DropdownButton<String>(
-                    value: priority,
-                    hint: const Text('Select Priority'),
-                    items: ['Critical', 'Normal', 'Low'].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      priority = value;
-                    });
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
                   },
                 ),
-                if (documentSnapshot != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Text(
-                      'Created At: ${DateFormat.yMd('fr_FR').add_jm().format(createdAt!)}',
-                      style: const TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-            ],
-          ),
-        ),
-        actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                // Close the dialog
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              child: Text(documentSnapshot == null ? 'Add' : 'Update'),
-              onPressed: () async {
-                if (true) {
-                  // Handle form submission here
-                  final String name = taskNameController.text;
-                  final String description = taskDescriptionController.text;
-                  print('Task Name: $name');
-                  print('Description: $description');
+                ElevatedButton(
+                  child: Text(documentSnapshot == null ? 'Add' : 'Update'),
+                  onPressed: () async {
+                    if (formKey.currentState!.validate()) {
+                      // Handle form submission here
+                      final String name = taskNameController.text;
+                      final String description = taskDescriptionController.text;
+                      // print('Task Name: $name');
+                      // print('Description: $description');
 
-                  if (name.isNotEmpty && description.isNotEmpty && priority != null && dueDate != null) {
-                    if (documentSnapshot == null) {
-                      await _tasks.add({
-                        "name": name,
-                        "description": description,
-                        "created_at": Timestamp.fromDate(DateTime.now()),
-                        "due_date": Timestamp.fromDate(dueDate!),
-                        "priority": priority,
-                        "is_done": false
-                      });
-                    } else {
-                      await _tasks.doc(documentSnapshot.id).update({
-                        "name": name,
-                        "description": description,
-                        "created_at": Timestamp.fromDate(DateTime.now()),
-                        // Update the creation date
-                        "due_date": Timestamp.fromDate(dueDate!),
-                        "priority": priority,
-                      });
+                      if (name.isNotEmpty && priority != null && dueDate != null) { // && description.isNotEmpty
+                        if (documentSnapshot == null) {
+                          await _tasks.add({
+                            "name": name,
+                            "description": description,
+                            "created_at": Timestamp.fromDate(DateTime.now()),  // Update the creation date
+                            "due_date": Timestamp.fromDate(dueDate!),
+                            "priority": priority,
+                            "is_done": false,
+                          });
+                        } else {
+                          await _tasks.doc(documentSnapshot.id).update({
+                            "name": name,
+                            "description": description,
+                            "created_at": Timestamp.fromDate(DateTime.now()),  // Update the creation date
+                            "due_date": Timestamp.fromDate(dueDate!),
+                            "priority": priority,
+                          });
+                        }
+                        Navigator.of(context).pop();
+                        taskNameController.clear();
+                        taskDescriptionController.clear();
+                      }
                     }
-                    Navigator.of(context).pop();
-                    taskNameController.clear();
-                    taskDescriptionController.clear();
-                  }
-                }
-                },
-            ),
-        ],
+                    },
+                ),
+              ],
+            );
+            },
         );
-      },
+        },
     );
-  },
-  );
   }
 
   void _deleteTask(String taskId) {
@@ -237,7 +236,7 @@ int _getPriorityValue(String priority) {
         stream: _tasks.orderBy('priority').orderBy('created_at', descending: true).snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
           if (streamSnapshot.hasData) {
-            print("Data received: ${streamSnapshot.data!.docs.length} tasks found.");
+            // print("Data received: ${streamSnapshot.data!.docs.length} tasks found."); // debug
             List<DocumentSnapshot> unfinishedTasks = [];
             List<DocumentSnapshot> finishedTasks = [];
 
@@ -321,7 +320,7 @@ int _getPriorityValue(String priority) {
               },
             );
           } else if (streamSnapshot.hasError) {
-            print("Error: ${streamSnapshot.error}");
+            // print("Error: ${streamSnapshot.error}"); // debug
             return Center(child: Text("An error occurred: ${streamSnapshot.error}"));
           } return const Center(child: CircularProgressIndicator());
         },
@@ -344,12 +343,12 @@ int _getPriorityValue(String priority) {
   void requestNotificationPermission() async {
 
     if (await Permission.notification.status.isGranted) {
-      print('Notification permission has been already granted.');
+      // print('Notification permission has been already granted.');
       // Notifications can be sent
 
       // Let s get the token for a mock notification:
       final fcmToken = await FirebaseMessaging.instance.getToken(); // THIS REFRESHES FOR EACH APP INSTALLATION
-      print("$fcmToken");
+      print("fcmToken: $fcmToken");
 
     }
     else {
@@ -359,15 +358,15 @@ int _getPriorityValue(String priority) {
       // So it should be alright just saying yes to notifications and it should all work fine
 
       if (status.isGranted) {
-        print('Notification permission granted.');
+        // print('Notification permission granted.');
         // Notifications can now be sent
 
         // Let s get the token for a mock notification:
         final fcmToken = await FirebaseMessaging.instance.getToken(); // THIS REFRESHES FOR EACH APP INSTALLATION
-        print("$fcmToken");
+        print("fcmToken: $fcmToken");
 
       } else if (status.isDenied) {
-        print('Notification permission denied. No token for you.');
+        // print('Notification permission denied. No token for you.');
         // Optionally open app settings
         // openAppSettings();
       }

@@ -3,20 +3,21 @@
 A complete To-Do App made in Flutter for Android, iOS and Web with Firebase.
 
 This app's features:
-- Cloud synced todo lists via Firebase in realtime
-- User authentication and guaranteed sync of task management across supported devices
-- Each account has its own private data that they authenticate into to view and modify
-- Notifications for reminders to complete the tasks
-- Priority queue management of tasks lightning fast from the CRUD of Cloud Firestore
+- Cloud synced todo list in realtime with Firebase Cloud Firestore
+- User authentication across supported devices with Firebase Auth
+- Each account has its own private data that they authenticate into to view and modify 
+- Notifications for reminders to complete the tasks via Firebase Cloud Messaging (opt-in)
+- Priority queue task management with lightning fast sync from the CRUD of Cloud Firestore
 - Offline app data, you have your tasks persist in the app even if you aren't connected to the internet
-- FOSS, it is Free and and Open Source Software with an * asterisk because of Firebase use
-- Cool UI and UX (imo)
-- Light / Dark mode with state management
-- (!) Dotenv and every key or stuff shown is deliberate for the project and was required.
+- FOSS, it is Free and and Open Source Software with an * asterisk because of Firebase use, otherwise the code is licensed under AGPL
+- Cool UI and UX (imho) with Material Design
+- Light / Dark mode with getx state management 
+
+Dotenv and every key or stuff shown is deliberate for the project and was requested to be present.
 
 ## Installation Instructions
 
-Go to the [Releases](https://github.com/xAlpharax/daily_planner/releases) page of the project and download the `.apk`, then install it. (I'm sorry but for the other platforms supported you will have to compile it yourself)
+Go to the [Releases](https://github.com/xAlpharax/daily_planner/releases) page of the project and download the `.apk`, then install it. Web is also available. (I'm sorry but for iOS you will have to compile it yourself)
 
 ## Demo
 
@@ -75,8 +76,6 @@ firebase_messaging: ^15.0.4
 # pretty app icon on all platforms
 flutter_launcher_icons: ^0.13.1
 ```
-
-## Graph detailing the arhitecture
 
 ## Flutter Installation Versions Info
 
