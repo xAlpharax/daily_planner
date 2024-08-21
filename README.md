@@ -5,13 +5,13 @@ A complete To-Do App made in Flutter for Android, iOS and Web with Firebase.
 This app's features:
 - Cloud synced todo list in realtime with Firebase Cloud Firestore
 - User authentication across supported devices with Firebase Auth
-- Each account has its own private data that they authenticate into to view and modify 
+- Each account has its own private data that they authenticate into to view and modify
 - Notifications for reminders to complete the tasks via Firebase Cloud Messaging (opt-in)
 - Priority queue task management with lightning fast sync from the CRUD of Cloud Firestore
 - Offline app data, you have your tasks persist in the app even if you aren't connected to the internet
 - FOSS, it is Free and and Open Source Software with an * asterisk because of Firebase use, otherwise the code is licensed under AGPL
 - Cool UI and UX (imho) with Material Design
-- Light / Dark mode with getx state management 
+- Light / Dark mode with getx state management
 
 Dotenv and every key or stuff shown is deliberate for the project and was requested to be present.
 
