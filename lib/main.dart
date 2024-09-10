@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';  // Google OAuth Provider
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
@@ -24,7 +25,13 @@ void main() async {
   );
   FirebaseUIAuth.configureProviders([
     EmailAuthProvider(),
-    // ... other providers like google, github, etc
+    GoogleProvider(
+      clientId: '76749090765-s84ig3orbt0u2bvcdf9brdmcq8mt7a9t.apps.googleusercontent.com',
+    ),
+    // GithubAuthProvider(
+    //   clientId: 'Ov23liC9n1nXerAbdhnF',
+    // ),
+    // ... other providers
   ]);
   await GetStorage.init(); // Initialize GetStorage
   await initializeDateFormatting('fr_FR', null); // Initialize Locale
