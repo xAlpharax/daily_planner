@@ -107,7 +107,18 @@
     <application
         android:label="Daily Planner"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+
+        android:hardwareAccelerated="true"
+        android:largeHeap="true"
+        android:resizeableActivity="true"
+        android:usesNonSdkApi="true"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true">
+
+        <meta-data
+            android:name="android.settings.WINDOW_SOFT_INPUT_MODE"
+            android:value="adjustPan" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -125,6 +136,7 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+<!--            <meta-data android:name="android.hardware.screen_refresh_rate" android:value="120.0" />-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

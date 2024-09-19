@@ -28,9 +28,6 @@ void main() async {
     GoogleProvider(
       clientId: '76749090765-s84ig3orbt0u2bvcdf9brdmcq8mt7a9t.apps.googleusercontent.com',
     ),
-    // GithubAuthProvider(
-    //   clientId: 'Ov23liC9n1nXerAbdhnF',
-    // ),
     // ... other providers
   ]);
   await GetStorage.init(); // Initialize GetStorage
